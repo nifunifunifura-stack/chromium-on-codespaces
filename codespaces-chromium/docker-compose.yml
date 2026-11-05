@@ -17,6 +17,10 @@ services:
         source: ${WORKSPACE_FILES_DIR:?Set by codespaces-chromium/setup.sh}
         target: /workspace
         read_only: true
+      - type: bind
+        source: ./halve-scroll-sensitivity.sh
+        target: /custom-cont-init.d/50-halve-scroll-sensitivity.sh
+        read_only: true
     network_mode: host
     restart: unless-stopped
     stop_grace_period: 30s

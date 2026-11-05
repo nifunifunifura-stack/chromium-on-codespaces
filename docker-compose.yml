@@ -12,6 +12,7 @@ services:
     volumes:
       - ./browser-data:/config
       - ./browser-files:/workspace:ro
+      - ./codespaces-chromium/halve-scroll-sensitivity.sh:/custom-cont-init.d/50-halve-scroll-sensitivity.sh:ro
     network_mode: host
     restart: unless-stopped
     stop_grace_period: 30s

@@ -25,6 +25,7 @@ for entry in '/browser-data/' '/.codespaces-chromium/'; do
   fi
 done
 install -m 644 "$source_dir/docker-compose.yml" "$install_dir/docker-compose.yml"
+install -m 755 "$source_dir/halve-scroll-sensitivity.sh" "$install_dir/halve-scroll-sensitivity.sh"
 install -m 755 "$source_dir/webopen" "$install_dir/webopen"
 install -m 755 "$source_dir/web" "$install_dir/web"
 

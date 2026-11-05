@@ -20,7 +20,8 @@ Codespace. Websites may still expire or revoke sessions independently. The
 browser container itself is recreated during a rebuild and starts automatically
 with the saved profile; its container ID does not persist. Chromium's
 crash-recovery prompt is disabled, and Docker is given time to stop the browser
-cleanly.
+cleanly. Touchpad and wheel scroll input is reduced to half speed in the
+remote desktop client.
 The browser container uses the Codespace host network because Docker bridge egress is unavailable in this environment. Port 3000 is forwarded privately by Codespaces. Host networking lets the browser container access services listening on the Codespace, including localhost services, so keep the port private and protect the browser credentials.
 
 If Docker is not available yet, use **Codespaces: Rebuild Container** once to
