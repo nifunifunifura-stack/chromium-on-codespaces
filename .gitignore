@@ -1,0 +1,6 @@
+.env
+/browser-files/*
+!/browser-files/.gitkeep
+/browser-data/
+/interclass-extension/
+/codespaces-chromium.zip

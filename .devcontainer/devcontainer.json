@@ -1,0 +1,21 @@
+{
+  "name": "Codespaces Chromium Browser",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "postCreateCommand": "mkdir -p browser-data && sudo install -m 755 .devcontainer/webopen .devcontainer/web /usr/local/bin/",
+  "postStartCommand": "docker compose up -d",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "moby": false
+    }
+  },
+  "forwardPorts": [
+    3002
+  ],
+  "portsAttributes": {
+    "3002": {
+      "label": "Chromium browser",
+      "onAutoForward": "openBrowser",
+      "visibility": "private"
+    }
+  }
+}

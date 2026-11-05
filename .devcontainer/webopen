@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+if [[ ! -f docker-compose.yml || ! -f .env ]]; then
+  printf 'Run webopen from the workspace root after creating .env from .env.example.\n' >&2
+  exit 1
+fi
+
+mkdir -p browser-data
+docker compose up -d
+
+for attempt in {1..30}; do
+  status="$(curl --silent --output /dev/null --write-out '%{http_code}' http://127.0.0.1:3002/ || true)"
+  if [[ "$status" != "000" ]]; then
+    printf 'Chromium is ready on forwarded port 3002 (HTTP %s).\n' "$status"
+    printf 'Open the forwarded port from the Codespaces Ports tab; access remains private.\n'
+    exit 0
+  fi
+  sleep 2
+done
+
+printf 'Chromium did not respond on port 3002. Check `docker compose logs chromium`.\n' >&2
+exit 1

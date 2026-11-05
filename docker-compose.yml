@@ -1,0 +1,18 @@
+services:
+  chromium:
+    image: lscr.io/linuxserver/chromium:latest
+    container_name: codespace-chromium
+    shm_size: "1gb"
+    environment:
+      CUSTOM_USER: "${BROWSER_USER:?Set BROWSER_USER in .env}"
+      PASSWORD: "${BROWSER_PASSWORD:?Set BROWSER_PASSWORD in .env}"
+      TITLE: "Codespace Chromium"
+      TZ: "Etc/UTC"
+      CHROME_CLI: "--disable-session-crashed-bubble"
+    volumes:
+      - ./browser-data:/config
+      - ./browser-files:/workspace:ro
+    ports:
+      - "3002:3000"
+    restart: unless-stopped
+    stop_grace_period: 30s
