@@ -5,7 +5,7 @@
 **起動方法**
 
 1. 「Codespaces: Rebuild Container（コンテナの再構築）」を実行してCodespaceを再構築し、Docker-in-Docker機能がインストールされるようにします。
-2. `.env.example` を `.env` にコピーし、`BROWSER_PASSWORD` に強力でユニークなパスワードを設定します（例: `openssl rand -hex 24` で生成）。※ `.env` ファイルはGitにコミットしないでください。
+2. `.env.example` を `.env` にコピーします。ブラウザのユーザー名とパスワードは、どちらもデフォルトで `1234` です。ポート3000はプライベートに保ち、`.env` ファイルはGitにコミットしないでください。
 3. ワークスペースのターミナルで `web run` を実行します。Chromiumが起動し、Codespacesが転送されたブラウザポートを自動的に開きます。
 4. `.env` に設定した認証情報を使ってサインインします。ブラウザが自動的に開かない場合は、Codespacesの「Ports」タブから転送された3000番ポートを開いてください。
 

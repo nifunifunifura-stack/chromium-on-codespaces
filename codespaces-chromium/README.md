@@ -8,19 +8,19 @@ curl -fsSL https://raw.githubusercontent.com/nifunifunifura-stack/chromium-on-co
 ```
 
 The setup preserves existing Dev Container settings, enables Docker-in-Docker,
-preserves existing Dev Container settings, configures private forwarding for
-port 3000, and generates a unique browser password in the Git-ignored
-`.codespaces-chromium/.env` file. The generated credentials are printed once
-by the setup script. Runtime configuration and the browser profile are stored
-in Git-ignored workspace folders (`.codespaces-chromium/` and `browser-data/`)
-so they survive Dev Container rebuilds of the same Codespace. Do not commit
-these folders: they contain credentials, cookies, and browser state. Deleting
-the Codespace does not preserve ignored workspace data; back it up securely
-before deleting the Codespace. Websites may still expire or revoke sessions
-independently. The browser container itself is recreated during a rebuild and
-starts automatically with the saved profile; its container ID does not persist.
-Chromium's crash-recovery prompt is disabled, and Docker is given time to stop
-the browser cleanly.
+configures private forwarding for port 3000, and sets the browser username and
+password to `1234` in the Git-ignored `.codespaces-chromium/.env` file. The
+credentials are printed by the setup script. Runtime configuration and the
+browser profile are stored in Git-ignored workspace folders
+(`.codespaces-chromium/` and `browser-data/`) so they survive Dev Container
+rebuilds of the same Codespace. Do not commit these folders: they contain
+credentials, cookies, and browser state. Deleting the Codespace does not
+preserve ignored workspace data; back it up securely before deleting the
+Codespace. Websites may still expire or revoke sessions independently. The
+browser container itself is recreated during a rebuild and starts automatically
+with the saved profile; its container ID does not persist. Chromium's
+crash-recovery prompt is disabled, and Docker is given time to stop the browser
+cleanly.
 The browser container uses the Codespace host network because Docker bridge egress is unavailable in this environment. Port 3000 is forwarded privately by Codespaces. Host networking lets the browser container access services listening on the Codespace, including localhost services, so keep the port private and protect the browser credentials.
 
 If Docker is not available yet, use **Codespaces: Rebuild Container** once to

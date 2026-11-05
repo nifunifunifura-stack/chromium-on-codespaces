@@ -29,12 +29,8 @@ install -m 755 "$source_dir/webopen" "$install_dir/webopen"
 install -m 755 "$source_dir/web" "$install_dir/web"
 
 if [[ ! -f "$config_dir/.env" ]]; then
-  if ! command -v openssl >/dev/null 2>&1; then
-    printf 'openssl is required to generate a browser password.\n' >&2
-    exit 1
-  fi
   umask 077
-  printf 'BROWSER_USER=browser\nBROWSER_PASSWORD=%s\n' "$(openssl rand -hex 24)" > "$config_dir/.env"
+  printf 'BROWSER_USER=1234\nBROWSER_PASSWORD=1234\n' > "$config_dir/.env"
 fi
 chmod 600 "$config_dir/.env"
 
@@ -47,7 +43,7 @@ sudo install -m 755 "$install_dir/web" "$install_dir/webopen" /usr/local/bin/
 
 printf 'Setup files and private port forwarding are configured.\n'
 printf 'Browser credentials:\n'
-sed 's/^BROWSER_PASSWORD=/BROWSER_PASSWORD=/' "$config_dir/.env"
+cat "$config_dir/.env"
 
 if docker info >/dev/null 2>&1; then
   web run
