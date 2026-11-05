@@ -12,7 +12,6 @@ services:
     volumes:
       - ./browser-data:/config
       - ./browser-files:/workspace:ro
-    ports:
-      - "3002:3000"
+    network_mode: host
     restart: unless-stopped
     stop_grace_period: 30s

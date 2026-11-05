@@ -10,12 +10,13 @@ services:
       TZ: "Etc/UTC"
       CHROME_CLI: "--disable-session-crashed-bubble"
     volumes:
-      - ./browser-data:/config
+      - type: bind
+        source: ${WORKSPACE_BROWSER_DATA_DIR:?Set by codespaces-chromium/setup.sh}
+        target: /config
       - type: bind
         source: ${WORKSPACE_FILES_DIR:?Set by codespaces-chromium/setup.sh}
         target: /workspace
         read_only: true
-    ports:
-      - "3002:3000"
+    network_mode: host
     restart: unless-stopped
     stop_grace_period: 30s

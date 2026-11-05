@@ -2,5 +2,6 @@
 /browser-files/*
 !/browser-files/.gitkeep
 /browser-data/
+/.codespaces-chromium/
 /interclass-extension/
 /codespaces-chromium.zip

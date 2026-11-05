@@ -9,10 +9,10 @@
     }
   },
   "forwardPorts": [
-    3002
+    3000
   ],
   "portsAttributes": {
-    "3002": {
+    "3000": {
       "label": "Chromium browser",
       "onAutoForward": "openBrowser",
       "visibility": "private"

@@ -1,26 +1,26 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-config_dir="${HOME}/.config/codespaces-chromium"
-install_dir="${HOME}/.local/share/codespaces-chromium"
+workspace_root="$(git -C "$PWD" rev-parse --show-toplevel 2>/dev/null || pwd)"
+install_dir="$workspace_root/.codespaces-chromium"
 
-if [[ ! -f "$config_dir/.env" || ! -f "$install_dir/docker-compose.yml" ]]; then
+if [[ ! -f "$install_dir/.env" || ! -f "$install_dir/docker-compose.yml" ]]; then
   printf 'Run codespaces-chromium/setup.sh from the workspace root first.\n' >&2
   exit 1
 fi
 
-compose=(docker compose --env-file "$config_dir/.env" -f "$install_dir/docker-compose.yml" -p codespaces-chromium)
+compose=(docker compose --env-file "$install_dir/.env" -f "$install_dir/docker-compose.yml" -p codespaces-chromium)
 "${compose[@]}" up -d
 
 for attempt in {1..30}; do
-  status="$(curl --silent --output /dev/null --write-out '%{http_code}' http://127.0.0.1:3002/ || true)"
+  status="$(curl --silent --output /dev/null --write-out '%{http_code}' http://127.0.0.1:3000/ || true)"
   if [[ "$status" != "000" ]]; then
-    printf 'Chromium is ready on forwarded port 3002 (HTTP %s).\n' "$status"
+    printf 'Chromium is ready on forwarded port 3000 (HTTP %s).\n' "$status"
     printf 'Open the forwarded browser tab; access is private.\n'
     exit 0
   fi
   sleep 2
 done
 
-printf 'Chromium did not respond on port 3002. Check: %s logs chromium\n' "${compose[*]}" >&2
+printf 'Chromium did not respond on port 3000. Check: %s logs chromium\n' "${compose[*]}" >&2
 exit 1

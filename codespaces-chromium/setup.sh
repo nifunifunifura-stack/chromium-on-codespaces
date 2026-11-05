@@ -12,15 +12,18 @@ JSON
 fi
 
 source_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-install_dir="${HOME}/.local/share/codespaces-chromium"
-config_dir="${HOME}/.config/codespaces-chromium"
+install_dir="$PWD/.codespaces-chromium"
+config_dir="$install_dir"
 workspace_files_dir="$PWD/browser-files"
+browser_data_dir="$PWD/browser-data"
 
-mkdir -p "$install_dir" "$config_dir" "$workspace_files_dir" "$PWD/browser-data"
+mkdir -p "$install_dir" "$workspace_files_dir" "$browser_data_dir"
 touch "$PWD/.gitignore"
-if ! grep -qxF '/browser-data/' "$PWD/.gitignore"; then
-  printf '\n/browser-data/\n' >> "$PWD/.gitignore"
-fi
+for entry in '/browser-data/' '/.codespaces-chromium/'; do
+  if ! grep -qxF "$entry" "$PWD/.gitignore"; then
+    printf '\n%s\n' "$entry" >> "$PWD/.gitignore"
+  fi
+done
 install -m 644 "$source_dir/docker-compose.yml" "$install_dir/docker-compose.yml"
 install -m 755 "$source_dir/webopen" "$install_dir/webopen"
 install -m 755 "$source_dir/web" "$install_dir/web"
@@ -38,7 +41,8 @@ chmod 600 "$config_dir/.env"
 python3 "$source_dir/patch_devcontainer.py" \
   "$PWD/.devcontainer/devcontainer.json" \
   "$config_dir/.env" \
-  "$workspace_files_dir"
+  "$workspace_files_dir" \
+  "$browser_data_dir"
 sudo install -m 755 "$install_dir/web" "$install_dir/webopen" /usr/local/bin/
 
 printf 'Setup files and private port forwarding are configured.\n'
