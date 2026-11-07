@@ -1,25 +1,19 @@
 services:
-  chromium:
-    image: lscr.io/linuxserver/chromium:latest
-    container_name: codespaces-chromium
+  chrome:
+    image: kasmweb/chrome:1.18.0
+    container_name: codespaces-chrome
     shm_size: "1gb"
     environment:
-      CUSTOM_USER: "${BROWSER_USER:?Set BROWSER_USER in the generated credentials file}"
-      PASSWORD: "${BROWSER_PASSWORD:?Set BROWSER_PASSWORD in the generated credentials file}"
-      TITLE: "Codespace Chromium"
-      TZ: "Etc/UTC"
-      CHROME_CLI: "--disable-session-crashed-bubble"
+      VNC_PW: "${BROWSER_PASSWORD:?Set BROWSER_PASSWORD in the generated credentials file}"
+      APP_ARGS: "--disable-session-crashed-bubble"
+      KASM_RESTRICTED_FILE_CHOOSER: "false"
     volumes:
       - type: bind
         source: ${WORKSPACE_BROWSER_DATA_DIR:?Set by codespaces-chromium/setup.sh}
-        target: /config
+        target: /home/kasm-user
       - type: bind
         source: ${WORKSPACE_FILES_DIR:?Set by codespaces-chromium/setup.sh}
         target: /workspace
-        read_only: true
-      - type: bind
-        source: ./halve-scroll-sensitivity.sh
-        target: /custom-cont-init.d/50-halve-scroll-sensitivity.sh
         read_only: true
     network_mode: host
     restart: unless-stopped

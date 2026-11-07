@@ -7,17 +7,17 @@ if [[ ! -f docker-compose.yml || ! -f .env ]]; then
 fi
 
 mkdir -p browser-data
-docker compose up -d
+docker compose up -d --remove-orphans
 
 for attempt in {1..30}; do
-  status="$(curl --silent --output /dev/null --write-out '%{http_code}' http://127.0.0.1:3000/ || true)"
+  status="$(curl --silent --insecure --output /dev/null --write-out '%{http_code}' https://127.0.0.1:6901/ || true)"
   if [[ "$status" != "000" ]]; then
-    printf 'Chromium is ready on forwarded port 3000 (HTTP %s).\n' "$status"
-    printf 'Open the forwarded port from the Codespaces Ports tab; access remains private.\n'
+    printf 'Google Chrome is ready on forwarded port 6901 (HTTPS %s).\n' "$status"
+    printf 'Open the forwarded Chrome tab; access remains private.\n'
     exit 0
   fi
   sleep 2
 done
 
-printf 'Chromium did not respond on port 3000. Check `docker compose logs chromium`.\n' >&2
+printf 'Google Chrome did not respond on port 6901. Check `docker compose logs chrome`.\n' >&2
 exit 1

@@ -17,23 +17,34 @@ ports = config.setdefault("forwardPorts", [])
 browser_configured_port = next(
     (
         port
-        for port in ("3000", "3002")
-        if attributes.get(port, {}).get("label") == "Chromium browser"
+        for port in ("3000", "3002", "6901")
+        if attributes.get(port, {}).get("label")
+        in ("Chromium browser", "Google Chrome browser")
     ),
     None,
 )
 if browser_configured_port is not None:
     ports[:] = [port for port in ports if str(port) != browser_configured_port]
-    if browser_configured_port != "3000":
+    if browser_configured_port != "6901":
         del attributes[browser_configured_port]
-if 3000 not in ports and "3000" not in ports:
-    ports.append(3000)
+if (
+    ("6901" in {str(port) for port in ports} or "6901" in attributes)
+    and attributes.get("6901", {}).get("label")
+    not in ("Chromium browser", "Google Chrome browser")
+):
+    raise SystemExit(
+        "Port 6901 is already configured; move the existing service before "
+        "installing the Google Chrome browser."
+    )
+if 6901 not in ports and "6901" not in ports:
+    ports.append(6901)
 
-browser_port = attributes.setdefault("3000", {})
+browser_port = attributes.setdefault("6901", {})
 browser_port.update(
     {
-        "label": "Chromium browser",
+        "label": "Google Chrome browser",
         "onAutoForward": "openBrowser",
+        "protocol": "https",
         "visibility": "private",
     }
 )

@@ -5,7 +5,7 @@ if [[ ! -f .devcontainer/devcontainer.json ]]; then
   mkdir -p .devcontainer
   cat > .devcontainer/devcontainer.json <<'JSON'
 {
-  "name": "Codespaces Chromium Browser",
+  "name": "Codespaces Google Chrome Browser",
   "image": "mcr.microsoft.com/devcontainers/universal:2"
 }
 JSON
@@ -13,7 +13,7 @@ fi
 
 source_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 install_dir="$PWD/.codespaces-chromium"
-config_dir="$install_dir"
+credentials_file="$install_dir/.env"
 workspace_files_dir="$PWD/browser-files"
 browser_data_dir="$PWD/browser-data"
 
@@ -25,26 +25,26 @@ for entry in '/browser-data/' '/.codespaces-chromium/'; do
   fi
 done
 install -m 644 "$source_dir/docker-compose.yml" "$install_dir/docker-compose.yml"
-install -m 755 "$source_dir/halve-scroll-sensitivity.sh" "$install_dir/halve-scroll-sensitivity.sh"
 install -m 755 "$source_dir/webopen" "$install_dir/webopen"
 install -m 755 "$source_dir/web" "$install_dir/web"
 
-if [[ ! -f "$config_dir/.env" ]]; then
+if [[ ! -f "$credentials_file" ]]; then
   umask 077
-  printf 'BROWSER_USER=1234\nBROWSER_PASSWORD=1234\n' > "$config_dir/.env"
+  printf 'BROWSER_PASSWORD=1234\n' > "$credentials_file"
 fi
-chmod 600 "$config_dir/.env"
+chmod 600 "$credentials_file"
 
 python3 "$source_dir/patch_devcontainer.py" \
   "$PWD/.devcontainer/devcontainer.json" \
-  "$config_dir/.env" \
+  "$credentials_file" \
   "$workspace_files_dir" \
   "$browser_data_dir"
 sudo install -m 755 "$install_dir/web" "$install_dir/webopen" /usr/local/bin/
 
 printf 'Setup files and private port forwarding are configured.\n'
 printf 'Browser credentials:\n'
-cat "$config_dir/.env"
+printf 'Username: kasm_user\n'
+cat "$credentials_file"
 
 if docker info >/dev/null 2>&1; then
   web run
