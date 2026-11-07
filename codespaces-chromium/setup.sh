@@ -30,7 +30,7 @@ install -m 755 "$source_dir/web" "$install_dir/web"
 
 if [[ ! -f "$credentials_file" ]]; then
   umask 077
-  printf 'BROWSER_PASSWORD=1234\n' > "$credentials_file"
+  printf 'BROWSER_PASSWORD=%s\n' "$(python3 -c 'import secrets; print(secrets.token_urlsafe(24))')" > "$credentials_file"
 fi
 chmod 600 "$credentials_file"
 
